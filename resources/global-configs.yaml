@@ -1,1 +1,2 @@
-git: {}
+git:
+  remoteHttps: https://github.com/DomnMihai/jenkins-pipeline-tutorial__<REPOSITORY_NAME>.git
