@@ -12,8 +12,24 @@ public void call(Map attrs = [:]) {
   switch (command) {
     case "stop":
       systemdService.stopService();
+      sleep(time: 5, unit: "SECONDS");
+      _assertServiceStatus(systemdService, "stopped");
       break;
     default:
       error("systemd command '${command}' not supported");
+  }
+}
+
+private void _assertServiceStatus(SystemdService systemdService, String expectedStatus) {
+  switch (expectedStatus) {
+    case "stopped":
+      if (systemdService.isServiceActive()) {
+        error("Systemd service '${systemdService.SERVICE_NAME}' is not stopped");
+      } else {
+        echo("Systemd service '${systemdService.SERVICE_NAME}' is stopped");
+      }
+      break;
+    default:
+      error("Expected status '${expectedStatus}' not supported");
   }
 }

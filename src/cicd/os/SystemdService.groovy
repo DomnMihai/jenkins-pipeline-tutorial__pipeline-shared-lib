@@ -14,4 +14,13 @@ class SystemdService {
     DeploymentConfigs.jobInstance.sh(script: "sudo systemctl stop ${SERVICE_NAME}", label: "Stop systemd service");
   }
 
+  public boolean isServiceActive() {
+    final String serviceActiveString = DeploymentConfigs.jobInstance.sh(script: "systemctl is-active ${SERVICE_NAME} || true", returnStdout: true, label: "Is systemd service active");
+    DeploymentConfigs.jobInstance.echo(serviceActiveString);
+    if (serviceActiveString.trim() == "active") {
+      return true;
+    }
+
+    return false;
+  }
 }
