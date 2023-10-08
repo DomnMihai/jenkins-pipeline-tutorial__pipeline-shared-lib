@@ -15,6 +15,11 @@ public void call(Map attrs = [:]) {
       sleep(time: 5, unit: "SECONDS");
       _assertServiceStatus(systemdService, "stopped");
       break;
+    case "start":
+      systemdService.startService();
+      sleep(time: 5, unit: "SECONDS");
+      _assertServiceStatus(systemdService, "started");
+      break;
     default:
       error("systemd command '${command}' not supported");
   }
@@ -27,6 +32,13 @@ private void _assertServiceStatus(SystemdService systemdService, String expected
         error("Systemd service '${systemdService.SERVICE_NAME}' is not stopped");
       } else {
         echo("Systemd service '${systemdService.SERVICE_NAME}' is stopped");
+      }
+      break;
+    case "started":
+      if (systemdService.isServiceActive()) {
+        echo("Systemd service '${systemdService.SERVICE_NAME}' is started");
+      } else {
+        error("Systemd service '${systemdService.SERVICE_NAME}' is not started");
       }
       break;
     default:
